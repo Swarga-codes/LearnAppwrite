@@ -11,7 +11,7 @@
     "start": "npm start"
   },
   "dependencies": {
-    "appwrite": "^11.0.0",
+    "appwrite": "^11.0.1",
     "lucide-react": "^0.285.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

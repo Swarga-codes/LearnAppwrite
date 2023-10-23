@@ -8,9 +8,6 @@ import Signup from './Components/Signup'
 import Home from './Components/Home'
 function App() {
 
-useEffect(() => {
-  console.log('hello appwrite')
-}, [])
 
   return (
     <Routes>

@@ -1,27 +1,48 @@
+import React, { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
-import { Client, Account } from "appwrite";
+import { Link, useNavigate } from 'react-router-dom'
+import { Client,Account } from 'appwrite'
 export default function Login() {
+  const [email,setEmail]=useState('')
+  const [password,setPassword]=useState('')
+  const navigator=useNavigate()
   const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1') // Your API Endpoint
-    .setProject('645f5e9b87c31ce1a65a');   
+  .setEndpoint('https://cloud.appwrite.io/v1') // Your API Endpoint
+  .setProject('65359017e5d857a82c08');               // Your project ID
+
+const account = new Account(client);
+function loginUser(){
+  const promise = account.createEmailSession(email, password);
+
+promise
+.then((response)=> {
+    console.log(response); // Success
+    localStorage.setItem('user_data',JSON.stringify(response))
+    navigator('/')
     
+}).catch(function (error) {
+    console.log(error); // Failure
+});
+}
   return (
     <section>
       <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+        <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24 h-screen">
           <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
             <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign in</h2>
             <p className="mt-2 text-sm text-gray-600">
               Don&apos;t have an account?{' '}
-              <a
-                href="#"
-                title=""
+              <Link
+                to={'/signup'}
                 className="font-semibold text-black transition-all duration-200 hover:underline"
               >
                 Create a free account
-              </a>
+              </Link>
             </p>
-            <form action="#" method="POST" className="mt-8">
+            <form onSubmit={(e)=>{
+              e.preventDefault()
+              loginUser()
+            }} className="mt-8">
               <div className="space-y-5">
                 <div>
                   <label htmlFor="" className="text-base font-medium text-gray-900">
@@ -33,6 +54,9 @@ export default function Login() {
                       className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                       type="email"
                       placeholder="Email"
+                      value={email}
+                      onChange={(e)=>setEmail(e.target.value)}
+                      required
                     ></input>
                   </div>
                 </div>
@@ -56,12 +80,15 @@ export default function Login() {
                       className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                       type="password"
                       placeholder="Password"
+                      required
+                      value={password}
+                      onChange={(e)=>setPassword(e.target.value)}
                     ></input>
                   </div>
                 </div>
                 <div>
                   <button
-                    type="button"
+                    type="submit"
                     className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                   >
                     Get started <ArrowRight className="ml-2" size={16} />
